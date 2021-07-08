@@ -24,7 +24,7 @@
           Parcel Type
         </v-col>
       </v-row>
-      <Container lock-axis="y">
+      <Container @drop="onDrop" lock-axis="y">
         <Draggable v-for="(data,index) in desserts" :key="index">
           <v-row class="pa-3 mt-0 pt-0" >
             <v-col class="box-col">
@@ -86,6 +86,11 @@ export default {
             type:'Entry'
           },
         ],
+    }
+  },
+  methods: {
+    onDrop(dropResult) {
+      this.items = applyDrag(this.desserts, dropResult);
     }
   },
   components:{
