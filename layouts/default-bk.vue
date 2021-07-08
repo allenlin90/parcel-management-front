@@ -8,14 +8,6 @@
       app
     >
       <v-list>
-        <div class="w-100 d-flex justify-center">
-          <img
-            class="Logo mb-5 mt-3"
-            alt="Logo"
-            src="/images/logo-makesend.png"
-            width="150"
-          >
-        </div>
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
@@ -38,8 +30,32 @@
       app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-btn
+        icon
+        @click.stop="miniVariant = !miniVariant"
+      >
+        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        @click.stop="clipped = !clipped"
+      >
+        <v-icon>mdi-application</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        @click.stop="fixed = !fixed"
+      >
+        <v-icon>mdi-minus</v-icon>
+      </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <v-btn
+        icon
+        @click.stop="rightDrawer = !rightDrawer"
+      >
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -67,7 +83,7 @@
       :absolute="!fixed"
       app
     >
-      <span>&copy; {{ new Date().getFullYear() }} makesend</span>
+      <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
@@ -81,15 +97,20 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-account-details',
-          title: 'assgin',
+          icon: 'mdi-apps',
+          title: 'Welcome',
           to: '/'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Inspire',
+          to: '/inspire'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Parcel management'
+      title: 'Vuetify.js'
     }
   }
 }

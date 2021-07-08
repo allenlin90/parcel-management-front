@@ -1,77 +1,115 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+  <v-row justify="center" align="center" class="pt-5">
+    <v-col cols="12" sm="12" md="12" class="mt-4 box pa-0">
+      <v-row class="pa-3 header">
+        <v-col class="bb">
+          Shipment ID
+        </v-col>
+        <v-col class="bb">
+          Receiver
+        </v-col>
+        <v-col class="bb">
+          Contact No.
+        </v-col>
+        <v-col class="bb">
+          Address
+        </v-col>
+        <v-col class="bb">
+          Hub
+        </v-col>
+        <v-col class="bb">
+          Status
+        </v-col>
+        <v-col class="bb">
+          Parcel Type
+        </v-col>
+      </v-row>
+      <Container lock-axis="y">
+        <Draggable v-for="(data,index) in desserts" :key="index">
+          <v-row class="pa-3 mt-0 pt-0" >
+            <v-col class="box-col">
+              <v-icon
+                dense
+                color="#666"
+              >
+                mdi-menu
+              </v-icon>
+              {{data.shipment_id}}
+            </v-col>
+            <v-col class="box-col">
+              {{data.receiver}}
+            </v-col>
+            <v-col class="box-col">
+              {{data.contact_no}}
+            </v-col>
+            <v-col class="box-col">
+              {{data.address}}
+            </v-col>
+            <v-col class="box-col">
+              {{data.hub}}
+            </v-col>
+            <v-col class="box-col">
+              {{data.status}}
+            </v-col>
+            <v-col class="box-col">
+              {{data.type}}
+            </v-col>
+          </v-row>
+        </Draggable>
+      </Container>
     </v-col>
   </v-row>
 </template>
+
+<script>
+import { Container, Draggable } from "vue-smooth-dnd"
+export default {
+  data() {
+    return {
+      desserts: [
+          {
+            shipment_id: 1,
+            receiver: 'Entry',
+            contact_no:123456,
+            address:'123 m1',
+            hub:'dmk',
+            status:'progress',
+            type:'Pending'
+          },
+          {
+            shipment_id: 2,
+            receiver: 'Entry',
+            contact_no:123456,
+            address:'321 m2',
+            hub:'rsm',
+            status:'progress',
+            type:'Entry'
+          },
+        ],
+    }
+  },
+  components:{
+    Container,
+    Draggable
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.header{
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+}
+.box{
+  border: 1px #CCC solid;
+
+  .bb{
+    border-bottom: 1px #CCC solid;
+  }
+
+  .box-col{
+    font-size: 0.8rem;
+  }
+}
+</style>
