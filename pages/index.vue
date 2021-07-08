@@ -90,7 +90,19 @@ export default {
   },
   methods: {
     onDrop(dropResult) {
-      this.items = applyDrag(this.desserts, dropResult);
+      console.log(dropResult)
+      this.move(this.desserts,dropResult.removedIndex,dropResult.addedIndex)
+    },
+    move(arr,from,to){
+
+      let numberOfDeletedElm = 1;
+
+      const elm = arr.splice(from, numberOfDeletedElm)[0];
+
+      numberOfDeletedElm = 0;
+
+      arr.splice(to, numberOfDeletedElm, elm);
+
     }
   },
   components:{
