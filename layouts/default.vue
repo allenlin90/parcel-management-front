@@ -107,6 +107,11 @@ export default {
                     title: 'Group Drop-off Sample',
                     to: '/dndgroupdropsample',
                 },
+                {
+                    icon: 'mdi-iframe',
+                    title: 'The other dnd library',
+                    to: '/dndLib',
+                },
             ],
             miniVariant: false,
             right: true,

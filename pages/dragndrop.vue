@@ -1,6 +1,9 @@
 <template>
     <section>
         <div class="simple-page">
+            <draggable v-model="items1" group="people" @start="drag=true" @end="drag=false">
+                <div v-for="item in items1" :key="item.id + 'dnd'">{{item.data}}</div>
+            </draggable>
             <v-data-table
                 :headers="headers"
                 :items="items3"
@@ -124,9 +127,11 @@
 <script>
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { applyDrag, generateItems } from '../utils/helpers.js'
+import draggable from 'vuedraggable'
+
 export default {
     name: 'Simple',
-    components: { Container, Draggable },
+    components: { Container, Draggable, draggable },
     data() {
         return {
             items1: generateItems(10, (i) => ({

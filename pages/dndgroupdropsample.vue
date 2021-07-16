@@ -58,6 +58,7 @@
 <script>
 import { Container, Draggable, smoothDnD } from 'vue-smooth-dnd'
 import { applyDrag, generateItems } from '../utils/helpers'
+
 export default {
     name: 'Groups',
     components: { Container, Draggable },
