@@ -1,24 +1,22 @@
-FROM node AS development
+FROM node:lts-alpine as development
 
-# create destination directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+# install simple http server for serving static content
+RUN npm install -g http-server
 
-# copy the app, note .dockerignore
-COPY ./ /usr/src/app/
-RUN npm install
+# make the 'app' folder the current working directory
+WORKDIR /app
 
-# build necessary, even if no static files are needed,
-# since it builds the server as well
-RUN npm run build
+# copy both 'package.json' and 'package-lock.json' (if available)
+COPY package*.json ./
 
-# expose 8000 on container
-EXPOSE 3000
+# install project dependencies
+RUN npm run generate
 
-# set app serving to permissive / assigned
-ENV NUXT_HOST=0.0.0.0
-# set app port
-ENV NUXT_PORT=3000
+# copy project files and folders to the current working directory (i.e. 'app' folder)
+COPY . .
 
-# start the app
-CMD [ "npm", "start" ]
+# build app for production with minification
+# RUN npm run build
+
+EXPOSE 8080
+CMD [ "http-server", "dist" ]
