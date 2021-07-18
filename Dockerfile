@@ -1,7 +1,11 @@
 FROM node:lts-alpine as development
 
+RUN yarn install --silent
+
 # install simple http server for serving static content
 RUN npm install -g http-server
+
+RUN yarn run generate
 
 # make the 'app' folder the current working directory
 WORKDIR /app
