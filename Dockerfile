@@ -1,4 +1,4 @@
-FROM node
+FROM node AS development
 
 # create destination directory
 RUN mkdir -p /usr/src/app
