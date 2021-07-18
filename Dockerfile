@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # install project dependencies
-RUN npm run generate
+# RUN npm run generate
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
