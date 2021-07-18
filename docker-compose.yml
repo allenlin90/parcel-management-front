@@ -1,0 +1,27 @@
+version: '3.7'
+
+networks:
+    network-1:
+      external:
+        name:
+          network-1
+
+services:
+
+    prod:
+        container_name: geobolt-parcel-dev
+        image: geobolt-parcel-dev:1.0.0
+        build:
+            context: .
+            target: development
+            dockerfile: ./Dockerfile
+        # command: npm run prod
+        ports:
+            - 8080
+        networks:
+            - network-1
+        volumes:
+            - .:/usr/src/app
+            - /usr/src/app/node_modules
+        restart: unless-stopped
+
