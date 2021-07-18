@@ -1,11 +1,7 @@
-FROM node:lts-alpine as development
-
-RUN yarn install --silent
+FROM node:latest as development
 
 # install simple http server for serving static content
 RUN npm install -g http-server
-
-RUN yarn run generate
 
 # make the 'app' folder the current working directory
 WORKDIR /app
@@ -18,6 +14,10 @@ COPY package*.json ./
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
+
+RUN yarn install --silent
+
+RUN yarn run generate
 
 # build app for production with minification
 # RUN npm run build
