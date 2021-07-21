@@ -46,9 +46,7 @@
             </v-btn> -->
         </v-app-bar>
         <v-main>
-            <v-container>
-                <Nuxt />
-            </v-container>
+            <Nuxt />
         </v-main>
         <!-- <v-navigation-drawer
             v-model="rightDrawer"
@@ -68,7 +66,6 @@
             </v-list>
         </v-navigation-drawer> -->
         <v-footer fixed app>
-            <!-- <v-footer :absolute="!fixed" app> -->
             <span>&copy; {{ new Date().getFullYear() }}</span>
         </v-footer>
     </v-app>
@@ -93,24 +90,14 @@ export default {
                     to: '/editorders',
                 },
                 {
-                    icon: 'mdi-map-marker-path',
-                    title: 'Drop-off',
-                    to: '/dragndrop',
+                    icon: 'mdi-file-tree',
+                    title: 'Assign Tasks to Drivers',
+                    to: '/assigntasks',
                 },
                 {
-                    icon: 'mdi-iframe',
-                    title: 'Drop-off Sample',
-                    to: '/dndsample',
-                },
-                {
-                    icon: 'mdi-iframe',
-                    title: 'Group Drop-off Sample',
-                    to: '/dndgroupdropsample',
-                },
-                {
-                    icon: 'mdi-iframe',
-                    title: 'The other dnd library',
-                    to: '/dndLib',
+                    icon: 'mdi-format-list-checks',
+                    title: 'Tasks Review',
+                    to: '/taskreview',
                 },
             ],
             miniVariant: false,

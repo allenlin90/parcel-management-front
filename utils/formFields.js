@@ -1,128 +1,88 @@
-const headers = [
-    { text: '', value: 'select', sortable: false },
-    { text: '#', sortable: false, },
-    {
+const formFields = {
+    meta: [{
         text: 'Order ID',
-        align: 'start',
         value: 'orderID',
-        sortable: false,
     },
     {
         text: 'Tracking ID',
-        align: 'start',
         value: 'trackingID',
-        sortable: false,
     },
     {
         text: 'Pickup Round',
-        align: 'start',
         value: 'pickupRound',
-        sortable: false,
     },
     {
         text: 'Size',
-        align: 'start',
         value: 'parcelSize',
-        sortable: false,
     },
     {
         text: 'COD',
-        align: 'start',
         value: 'cod',
-        sortable: false,
     },
     {
         text: 'Temp Control',
-        align: 'start',
         value: 'temp',
-        sortable: false,
     },
     {
         text: 'Service Date',
-        align: 'start',
         value: 'orderDate',
         width: '7.5rem',
-        sortable: false,
-    },
-    {
-        text: 'Sender Name',
-        align: 'start',
-        value: 'senderName',
-        width: '12.5rem',
-        sortable: false,
-    },
-    {
-        text: 'Sender Phone',
-        align: 'start',
-        value: 'senderNo',
-        width: '7rem',
-        sortable: false,
-    },
-    {
-        text: 'Sender Address',
-        align: 'start',
-        value: 'pickupAddress',
-        width: '30rem',
-        sortable: false,
-    },
-    {
-        text: 'Sender District',
-        align: 'start',
-        value: 'pickupDistrict',
-        sortable: false,
-    },
-    {
-        text: 'Sender Postcode',
-        align: 'start',
-        value: 'pickupPostcode',
-        sortable: false,
-    },
-    {
-        text: 'Receiver Name',
-        align: 'start',
-        value: 'receiverName',
-        width: '7.5rem',
-        sortable: false,
-    },
-    {
-        text: 'Receiver Phone',
-        align: 'start',
-        value: 'receiverNo',
-        width: '7rem',
-        sortable: false,
-    },
-    {
-        text: 'Receiver Address',
-        align: 'start',
-        value: 'dropAddress',
-        width: '30rem',
-        sortable: false,
-    },
-    {
-        text: 'Receiver District',
-        align: 'start',
-        value: 'dropDistrict',
-        sortable: false,
-    },
-    {
-        text: 'Receiver Postcode',
-        align: 'start',
-        value: 'dropPostcode',
-        sortable: false,
     },
     {
         text: 'Delivery Status',
-        align: 'start',
         value: 'status',
-        sortable: false,
     },
     {
         text: 'Parcel Type',
-        align: 'start',
         value: 'parcelType',
-        sortable: false,
     },
-    { text: 'Remove', align: 'start', value: 'remove', sortable: false },
-];
+    ],
+    sender: [{
+        text: 'Sender Name',
+        value: 'senderName',
+        width: '12.5rem',
+    },
+    {
+        text: 'Sender Phone',
+        value: 'senderNo',
+        width: '7rem',
+    },
+    {
+        text: 'Sender Address',
+        value: 'pickupAddress',
+        width: '30rem',
+    },
+    {
+        text: 'Sender District',
+        value: 'pickupDistrict',
+    },
+    {
+        text: 'Sender Postcode',
+        value: 'pickupPostcode',
+    },],
+    receiver: [{
+        text: 'Receiver Name',
+        value: 'receiverName',
+        width: '7.5rem',
+    },
+    {
+        text: 'Receiver Phone',
+        value: 'receiverNo',
+        width: '7rem',
+    },
+    {
+        text: 'Receiver Address',
+        value: 'dropAddress',
+        width: '30rem',
+    },
+    {
+        text: 'Receiver District',
+        value: 'dropDistrict',
+    },
+    {
+        text: 'Receiver Postcode',
+        value: 'dropPostcode',
+    },],
 
-export default headers;
+}
+export default formFields;
