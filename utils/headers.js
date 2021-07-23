@@ -23,19 +23,19 @@ const headers = [
         text: 'Size',
         align: 'start',
         value: 'parcelSize',
-        sortable: false,
+        sortable: true,
+    },
+    {
+        text: 'Temp.',
+        align: 'start',
+        value: 'temp',
+        sortable: true,
     },
     {
         text: 'COD',
         align: 'start',
         value: 'cod',
-        sortable: false,
-    },
-    {
-        text: 'Temp Control',
-        align: 'start',
-        value: 'temp',
-        sortable: false,
+        sortable: true,
     },
     {
         text: 'Service Date',
@@ -72,6 +72,12 @@ const headers = [
         sortable: false,
     },
     {
+        text: 'Sender Province',
+        align: 'start',
+        value: 'pickupProvince',
+        sortable: true,
+    },
+    {
         text: 'Sender Postcode',
         align: 'start',
         value: 'pickupPostcode',
@@ -103,6 +109,12 @@ const headers = [
         align: 'start',
         value: 'dropDistrict',
         sortable: false,
+    },
+    {
+        text: 'Receiver Province',
+        align: 'start',
+        value: 'dropProvince',
+        sortable: true,
     },
     {
         text: 'Receiver Postcode',

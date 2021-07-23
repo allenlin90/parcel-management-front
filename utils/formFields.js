@@ -12,10 +12,6 @@ const formFields = {
         value: 'pickupRound',
     },
     {
-        text: 'Size',
-        value: 'parcelSize',
-    },
-    {
         text: 'COD',
         value: 'cod',
     },
@@ -36,6 +32,10 @@ const formFields = {
         text: 'Parcel Type',
         value: 'parcelType',
     },
+    {
+        text: 'Size',
+        value: 'parcelSize',
+    },
     ],
     sender: [{
         text: 'Sender Name',
@@ -53,13 +53,18 @@ const formFields = {
         width: '30rem',
     },
     {
+        text: 'Sender Province',
+        value: 'pickupProvince',
+    },
+    {
         text: 'Sender District',
         value: 'pickupDistrict',
     },
     {
         text: 'Sender Postcode',
         value: 'pickupPostcode',
-    },],
+    },
+    ],
     receiver: [{
         text: 'Receiver Name',
         value: 'receiverName',
@@ -76,13 +81,18 @@ const formFields = {
         width: '30rem',
     },
     {
+        text: 'Receiver Province',
+        value: 'dropProvince',
+    },
+    {
         text: 'Receiver District',
         value: 'dropDistrict',
     },
     {
         text: 'Receiver Postcode',
         value: 'dropPostcode',
-    },],
+    },
+    ],
 
 }
 export default formFields;
