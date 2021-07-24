@@ -1,5 +1,6 @@
 export const state = () => ({
-    host: 'https://parcel-api.makesend.ninja'
+    host: 'https://parcel-api.makesend.ninja',
+    centralHost: 'https://apiold.makesend.ninja',
 });
 
 export const actions = {}

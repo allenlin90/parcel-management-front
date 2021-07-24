@@ -306,7 +306,6 @@
 import draggable from 'vuedraggable'
 import tasks from '../utils/parcelTasks.js'
 import headers from '../utils/headers.js'
-import ContextMenu from '../components/ContextMenu.vue'
 
 export default {
     components: { draggable },

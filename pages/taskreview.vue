@@ -51,7 +51,7 @@
                                                         <v-icon
                                                             @click="editSize"
                                                             v-else
-                                                            >mdi-close</v-icon
+                                                            >mdi-check</v-icon
                                                         >
                                                     </h3></v-row
                                                 >
@@ -228,6 +228,7 @@
                                                     item-text="name"
                                                     item-value="id"
                                                     solo
+                                                    @change="districtList"
                                                 ></v-select>
                                             </v-col>
                                             <v-col>
@@ -237,13 +238,12 @@
                                                             .text
                                                     "
                                                     :readonly="
-                                                        !editing ||
-                                                        !districtList.length
+                                                        !editing || !districts.length
                                                     "
                                                     v-model="
                                                         parcelToUpdate.dropDistrict
                                                     "
-                                                    :items="districtList"
+                                                    :items="districts"
                                                     item-text="name"
                                                     item-value="id"
                                                     solo
@@ -466,7 +466,7 @@ export default {
     },
     data() {
         return {
-            editDialog: true, // this should be false in production
+            editDialog: false, 
             loadingDialog: false,
             tableLoading: false,
             editing: false,
@@ -513,16 +513,11 @@ export default {
                 parcelType: 'Bakery',
             },
             formFields,
-            districts: [],
             provinces: [],
+            districts: [],
         }
     },
     computed: {
-        districtList() {
-            if (!Number.isNaN(parseInt(this.parcelToUpdate.dropProvince)))
-                return this.districts[this.parcelToUpdate.dropProvince]
-            return []
-        },
         filters() {
             const filters = this.headers.filter((header) => {
                 if (
@@ -683,6 +678,18 @@ export default {
         },
     },
     methods: {
+        async districtList() {
+            if (!Number.isNaN(parseInt(this.parcelToUpdate.dropProvince))) {
+                const districtsLoaded = await this.$store.dispatch('serviceArea/districts', {provinceID: parseInt(this.parcelToUpdate.dropProvince)})
+                if (districtsLoaded) {
+                    this.districts = this.$store.getters['serviceArea/districts'];
+                } else {
+                    this.districts = [];
+                }
+            } else {
+                this.districts = [];
+            }
+        },
         editSize() {
             this.editingSize = !this.editingSize
         },
@@ -724,9 +731,10 @@ export default {
                 return taskToParse.dropPostcode
             }
         },
-        editParcel(parcel) {
+        async editParcel(parcel) {
             this.editDialog = true
             this.parcelToUpdate = Object.assign({}, parcel)
+            await this.districtList()
         },
         async updateParcel() {
             // await this.$store.dispatch('parcel/editParcel', this.editItem);
@@ -798,7 +806,10 @@ export default {
         this.districts = this.$store.getters['serviceArea/districts']
 
         // import provinces
-        this.provinces = this.$store.getters['serviceArea/provinces']
+        const provincesLoaded = await this.$store.dispatch('serviceArea/provinces');
+        if (provincesLoaded) {
+            this.provinces = this.$store.getters['serviceArea/provinces']
+        }
 
         // set up sizes
         this.sizes = sizes
@@ -836,7 +847,7 @@ export default {
             // this.tasks = this.$store.getters['parcel/firstRoundParcels']
         }
 
-        this.tasks = tasks
+        // this.tasks = tasks // this is for testing with local tasks
 
         // finish loading data
         this.tableLoading = false
@@ -888,10 +899,16 @@ html {
     background-color: $banner-color;
     .v-data-table__wrapper {
         background-color: $white-color;
-        height: calc(100vh - 164px + 36px - 59px);
+        height: calc(100vh - 164px + 36px - 56px);
         overflow: auto;
         // padding-left: 1rem;
         cursor: grab;
+    }
+
+    @media (max-width: 960px) {
+        .v-data-table__wrapper {
+            height: calc(100vh - 164px + 36px - 48px);
+        }
     }
 }
 #task_review {
