@@ -1,7 +1,7 @@
 <template>
     <section id="task_review">
         <v-dialog v-model="loadingDialog" max-width="50%"> </v-dialog>
-        <v-dialog v-model="editDialog" scrollable max-width="70%">
+        <v-dialog v-model="editParcelDialog" scrollable max-width="70%">
             <v-card>
                 <v-card-title>Edit Parcel</v-card-title>
                 <v-card-text>
@@ -173,7 +173,7 @@
                                             >
                                                 <v-row>
                                                     <v-text-field
-                                                        :disabled="!editing"
+                                                        :disabled="!editingParcel"
                                                         v-model="
                                                             parcelToUpdate[
                                                                 field.value
@@ -197,7 +197,7 @@
                                                                 .text
                                                         "
                                                         auto-grow
-                                                        :readonly="!editing"
+                                                        :readonly="!editingParcel"
                                                         v-model="
                                                             parcelToUpdate[
                                                                 formFields
@@ -207,7 +207,7 @@
                                                         "
                                                         rows="2"
                                                         required
-                                                        :clearable="editing"
+                                                        :clearable="editingParcel"
                                                     >
                                                     </v-textarea>
                                                 </v-row>
@@ -220,7 +220,7 @@
                                                         formFields.receiver[3]
                                                             .text
                                                     "
-                                                    :readonly="!editing"
+                                                    :readonly="!editingParcel"
                                                     v-model="
                                                         parcelToUpdate.dropProvince
                                                     "
@@ -238,7 +238,7 @@
                                                             .text
                                                     "
                                                     :readonly="
-                                                        !editing || !districts.length
+                                                        !editingParcel || !districts.length
                                                     "
                                                     v-model="
                                                         parcelToUpdate.dropDistrict
@@ -251,7 +251,7 @@
                                             </v-col>
                                             <v-col>
                                                 <v-text-field
-                                                    :disabled="!editing"
+                                                    :disabled="!editingParcel"
                                                     v-model="
                                                         parcelToUpdate[
                                                             formFields
@@ -271,9 +271,9 @@
                                         </v-row>
                                         <v-row justify="center">
                                             <v-btn
-                                                v-if="!editing"
+                                                v-if="!editingParcel"
                                                 color="primary"
-                                                @click.prevent="startEdit"
+                                                @click.prevent="startEditParcel"
                                                 transition="fade-transition"
                                                 >Edit
                                                 <v-icon
@@ -283,7 +283,7 @@
                                             <div v-else>
                                                 <v-btn
                                                     color="secondary"
-                                                    @click="startEdit"
+                                                    @click="startEditParcel"
                                                     >Cancel</v-btn
                                                 >
                                                 <v-btn
@@ -301,11 +301,33 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="warning" @click="cancelEdit">Close</v-btn>
+                    <v-btn color="warning" @click="cancelEditParcel">Close</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <v-app-bar fixed app style="top: 64px; padding-top: 0.5rem">
+        <v-dialog v-model="editHubDialog" scrollable max-width="50%">
+            <v-card>
+                <v-card-title>Edit Hub {{ parcelToUpdate.trackingID }}</v-card-title>
+                <v-card-text>
+                    <v-form @submit.prevent>
+                        <v-row justify="center">
+                            <v-col cols="8">
+                                <v-select :items="hubs" item-text="name" item-value="id"></v-select>
+                            </v-col>
+                        </v-row>
+                        <v-row justify="center">
+                            <v-col cols="8">
+                                <v-row justify="space-around">
+                                    <v-btn color="error" @click="cancelChangeHub">Cancel</v-btn>
+                                    <v-btn color="primary" @click="changeHub">Confirm</v-btn>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+        <v-app-bar v-if="!isAssignedToHubs" fixed app style="top: 64px; padding-top: 0.5rem">
             <v-toolbar-title>Filters</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-row>
@@ -350,6 +372,21 @@
                 </v-col>
             </v-row>
         </v-app-bar>
+        <v-app-bar v-else fixed app style="top: 64px; padding-top: 0.5rem">
+            <v-toolbar-title>Filters</v-toolbar-title>
+            <v-divider class="mx-4" inset vertical></v-divider>
+            <v-row justify="end">
+                <v-col cols="12" sm="6" style="display: flex;">
+                    <div style="align-self: center" class="mr-4"><label for="select_hub" style="white-space:nowrap; font-weight: bold;">Select A Hub</label></div>
+                    <v-select clearable v-model="selectedHub" :items="hubs" item-text="name" item-value="id"></v-select>
+                </v-col>
+            </v-row>
+            <!-- <div id="hubFilters">
+                <div v-for="hub in hubs" :key="hub.code">
+                    <v-btn color="primary">{{ hub.name }}</v-btn>
+                </div>
+            </div> -->
+        </v-app-bar>
         <div style="height: 64px"></div>
         <v-data-table
             :headers="headers"
@@ -373,6 +410,9 @@
                 'show-current-page': true,
             }"
         >
+            <template v-slot:header.edit>
+                {{ isAssignedToHubs ?  'Edit Hub' : 'Edit' }}
+            </template>
             <template v-slot:body="{ items }">
                 <tbody>
                     <tr v-for="(item, index) in items" :key="item.trackingId">
@@ -381,9 +421,11 @@
                                 small
                                 class="mr-2"
                                 @click="editParcel(item)"
+                                v-if="!isAssignedToHubs"
                             >
                                 mdi-pencil
                             </v-icon>
+                            <v-icon small class="mr-2" @click="startChangeHub(item)" v-else>mdi-pencil</v-icon>
                         </td>
                         <td>{{ index + 1 }}</td>
                         <td>{{ item.orderID }}</td>
@@ -437,13 +479,16 @@
                 </tbody>
             </template>
             <template v-slot:footer.prepend>
-                <div id="footer_btn">
+                <div class="footer_btn" v-if="!isAssignedToHubs">
                     <v-btn color="warning" @click="confirmRoundTasks"
                         >Confirm Tasks</v-btn
                     >
                     <v-btn color="error" @click="assignToHubs"
                         >Assign To Hubs</v-btn
                     >
+                </div>
+                <div class="footer_btn">
+                    <v-btn color="success" @click="approveTaskToHubs">Approve</v-btn>
                 </div>
             </template>
         </v-data-table>
@@ -461,15 +506,17 @@ export default {
         dropoffRound: {
             type: String,
             default: '1',
-            required: false, // this should be true in production
+            required: false, // this should be true by default in production
         },
     },
     data() {
         return {
-            editDialog: false, 
+            isAssignedToHubs: true, // this should be false by default in production
+            editParcelDialog: false, 
             loadingDialog: false,
+            editHubDialog: false,
             tableLoading: false,
-            editing: false,
+            editingParcel: false,
             editingSize: false,
             panel: [0],
             editPanel: [0, 1, 2],
@@ -479,6 +526,7 @@ export default {
             searchFilter: '',
             searchText: '',
             hubs: [],
+            selectedHub: '',
             tempOptions: [
                 { text: 'Yes', value: '1' },
                 { text: 'No', value: '0' },
@@ -693,16 +741,32 @@ export default {
         editSize() {
             this.editingSize = !this.editingSize
         },
-        startEdit() {
-            this.editing = !this.editing
+        startEditParcel() {
+            this.editingParcel = !this.editingParcel
         },
         confirmRoundTasks() {
             console.log(this.dropoffRound)
         },
         async assignToHubs() {
-            await this.$store.dispatch('hub/assignToHubs', {
-                round: this.dropoffRound,
-            })
+            // await this.$store.dispatch('hub/assignToHubs', {
+            //     round: this.dropoffRound,
+            // })
+            console.log('assign to hubs!')
+        },
+        async changeHub() {
+            console.log('hub is changed!');
+            this.editHubDialog = false;
+        },
+        startChangeHub(parcel) {
+            this.editHubDialog = true;
+            this.parcelToUpdate = Object.assign({}, parcel)
+        },
+        cancelChangeHub() {
+            this.editHubDialog = false;
+        },
+        async approveTaskToHubs() {
+            // await this.$store.dispatch('parcel/approve', {});
+            console.log('approved!')
         },
         isPostcodeMatch(trackingId) {
             const taskToParse = this.tasks.find(
@@ -732,18 +796,20 @@ export default {
             }
         },
         async editParcel(parcel) {
-            this.editDialog = true
+            this.editParcelDialog = true
             this.parcelToUpdate = Object.assign({}, parcel)
             await this.districtList()
         },
         async updateParcel() {
             // await this.$store.dispatch('parcel/editParcel', this.editItem);
-            setTimeout(() => {
-                this.editDialog = false
-            }, 1500)
+                this.editParcelDialog = false
+                console.log('parcel is updated!')
         },
-        cancelEdit() {
-            this.editDialog = false
+        cancelEditParcel() {
+            this.editParcelDialog = false
+            this.resetEditParcel()
+        },
+        resetEditParcel() {
             this.parcelToUpdate = {
                 orderID: '',
                 trackingID: '',
@@ -755,11 +821,13 @@ export default {
                 senderNo: '',
                 pickupAddress: '',
                 pickupDistrict: '',
+                pickupProvince: '',
                 pickupPostcode: '',
                 receiverName: '',
                 receiverNo: '',
                 dropAddress: '',
                 dropDistrict: '',
+                dropProvince: '',
                 dropPostcode: '',
                 status: '',
                 parcelType: '',
@@ -951,7 +1019,7 @@ html {
             }
         }
     }
-    #footer_btn {
+    .footer_btn {
         margin-left: auto;
         order: 1;
     }
@@ -976,6 +1044,13 @@ html {
     }
     .edit_input {
         border-style: inset;
+    }
+    #hubFilters {
+        display: flex;
+        overflow-x: auto;
+        :not(button:last-child) {
+            margin-right: .5rem;
+        }
     }
 }
 </style>
